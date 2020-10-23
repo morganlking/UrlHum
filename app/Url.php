@@ -65,7 +65,6 @@ class Url extends Model
         $url->hide_stats = $hideUrlStats;
         $url->save();
 
-
     }
 
     /**

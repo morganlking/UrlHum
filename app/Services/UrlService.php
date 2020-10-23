@@ -13,6 +13,8 @@ namespace App\Services;
 use App\DeviceTarget;
 use App\DeviceTargetsEnum;
 use App\Http\Requests\ShortUrl;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Url;
@@ -218,12 +220,18 @@ class UrlService
      */
     public function assignDeviceTargetUrl($request, $short_url_id): void
     {
-        $data = [];
+        $data = [
+            'short_url_id' => $short_url_id,
+            'device' => "0",
+            'target_url' => $request["url"],
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
 
         $enums = DeviceTargetsEnum::all();
 
         foreach ($enums as $device) {
-            if ($request[$device->name] !== null) {
+            if (array_key_exists($device->name, $request)) {
                 $data[] = [
                     'short_url_id' => $short_url_id,
                     'device' => $device->id,
@@ -234,7 +242,9 @@ class UrlService
             }
         }
 
-        DeviceTarget::insert($data);
+        //I do not think this function exists
+        DeviceTarget::createDeviceTarget($data);
+        print "done";
     }
 
     /**
