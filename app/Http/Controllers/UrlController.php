@@ -62,7 +62,6 @@ class UrlController extends Controller
         $data = $request->validated();
         $siteUrl = request()->getHttpHost();
 
-
         // If user is not logged in, he can't set private statistics,
         // because otherwise they will not be available to anybody else but admin
         if (! Auth::check()) {
@@ -88,7 +87,6 @@ class UrlController extends Controller
 
         $this->url->assignDeviceTargetUrl($data, $short_url_id);
 
-        print "complete";
         return Redirect::route('home')
             ->with('success', $short)
             ->with('siteUrl', $siteUrl);
