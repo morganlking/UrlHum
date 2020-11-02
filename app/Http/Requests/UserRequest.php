@@ -16,6 +16,15 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
 {
+    function console_log($output, $with_script_tags = true) {
+        $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+            ');';
+        if ($with_script_tags) {
+            $js_code = '<script>' . $js_code . '</script>';
+        }
+        echo $js_code;
+    }
+    
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -23,6 +32,7 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
+        $this->console_log("authorize\n");
         return auth()->check();
     }
 
@@ -33,6 +43,8 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
+        $this->console_log("rules\n");
+
         return [
             'name' => [
                 'required', 'min:3',
@@ -46,3 +58,4 @@ class UserRequest extends FormRequest
         ];
     }
 }
+
