@@ -11,6 +11,7 @@
 namespace Tests\Feature;
 
 use App\User;
+use mysql_xdevapi\Exception;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -58,8 +59,24 @@ class UserTest extends TestCase
     }
 
     /**
-     * Show the edit user form.
+     * Create an user using the form. Post request.
      *
+     * @return void
+     */
+    public function test_post_register_user()
+    {
+        print $this
+            ->post('/register', ['name' => 'Testing', 'email' => 'test@urlhum.com', 'password' => 'secret123', 'password_confirmation' => 'secret123', 'signUpCheck' => 1])
+            ->assertStatus(302)
+            ->content();
+
+
+        $user = User::where('email', 'test@urlhum.com')->first();
+        $this->assertEquals('test@urlhum.com', $user->email);
+    }
+
+    /**
+     * Show the edit user form.
      * @return void
      */
     public function test_get_edit_user()
